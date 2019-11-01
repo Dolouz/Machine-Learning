@@ -1,0 +1,19 @@
+logdir="lstm_auto\\"
+autoencoder.compile(metrics=['accuracy'],
+                    loss='mean_squared_error',
+                    optimizer='adam')
+cp = ModelCheckpoint(filepath="autoencoder_classifier.h5",
+                               save_best_only=True,
+                               verbose=0)
+tb = TensorBoard(log_dir=logdir,
+                histogram_freq=0,
+                write_graph=True,
+                write_images=True)
+
+history = autoencoder.fit(df_train_0_x_rescaled, df_train_0_x_rescaled,
+                    epochs=nb_epoch,
+                    batch_size=batch_size,
+                    shuffle=True,
+                    validation_data=(df_valid_0_x_rescaled, df_valid_0_x_rescaled),
+                    verbose=1,
+                    callbacks=[cp, tb]).history
